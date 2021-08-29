@@ -1,10 +1,8 @@
 {{ define "main" }}
 
-  <!-- test -->
-
   <div class="row">
     <div class="column">
-      {{ range .Paginator.Pages }}
+      {{ range .Site.Pages }}
       <h3><a href="{{ .RelPermalink}}">{{ .Title }}</a></h3>
       <span class="article_info">{{ .Site.Params.Author }} on {{ .Date.Format "2006-01-02" }}</span>
       <p class="article_summary">{{ .Summary }}</p>
