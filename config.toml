@@ -1,0 +1,20 @@
+baseURL = "https://countdigi.github.io/"
+
+languageCode = "en-us"
+
+title = "Kevin M. Counts"
+
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+pygmentsOptions    = "linenos=table"
+
+[permalinks]
+  posts = "/:year/:month/:slug/"
+
+[taxonomies]
+  tag = ""
+  group = ""
+  category = ""
+
+[params]
+  author = "Kevin M. Counts"

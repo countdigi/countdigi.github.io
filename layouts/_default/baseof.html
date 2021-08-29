@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/icons/favicon.ico" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/pygments/default.css" />
+
+    {{ if .Page.IsHome }}
+    <title>{{ .Site.Title }}</title>
+    <meta property="title"       content="{{ .Site.Title }}" />
+    <meta property="type"        content="website" />
+    {{ else }}
+    <title>{{ .Site.Title }} :: {{ .Title }}</title>
+    <meta property="title"       content="{{ .Site.Title }} :: {{ .Title }}" />
+    <meta property="type"        content="article" />
+    {{ end }}
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>{{ .Site.Title }}</h1>
+    </div>
+
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="https://github.com/countdigi">Github</a>
+    </div>
+
+    {{ block "main" . }}
+
+    {{ end }}
+
+    <div class="footer">
+      &copy; Kevin M. Counts - Updated {{ now.Format "2006-01-02" }}
+    </div>
+  </body>
+</html>

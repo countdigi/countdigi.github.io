@@ -1,0 +1,11 @@
+{{ define "main" }}
+
+  <div class="row">
+    <div class="column">
+      <h1>{{ .Title }}</h1>
+      <span class="article_info">by {{ .Site.Params.Author }} on {{ .Date.Format "2006-01-02" }}</span>
+    {{ .Content }}
+    </div>
+  </div>
+
+{{ end }}
