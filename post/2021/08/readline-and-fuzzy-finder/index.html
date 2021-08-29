@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/icons/favicon.ico" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/pygments/default.css" />
+
+    
+    <title>Kevin M. Counts :: Readline and Fuzzy Finder</title>
+    <meta property="title"       content="Kevin M. Counts :: Readline and Fuzzy Finder" />
+    <meta property="type"        content="article" />
+    
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Kevin M. Counts</h1>
+    </div>
+
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="https://github.com/countdigi">Github</a>
+    </div>
+
+    
+
+  <div class="row">
+    <div class="column">
+      <h1>Readline and Fuzzy Finder</h1>
+      <span class="article_info">by Kevin M. Counts on 2021-08-26</span>
+    <p>In my bioinformatics work, I often find myself maintaining a text file with commands, options, and paths relevant to the tasks I am working on.
+I have a workflow to yank a selection from this text file into an intermediate file and then use the <code>fc</code> builtin to copy the selection onto my command prompt.
+This workflow works well but I wanted to improve it even more increasing efficiency.</p>
+<p>After some experimentation I was inspired by the <a href="https://github.com/junegunn/fzf">fzf</a> (Fuzzy Finder) project and it&rsquo;s use of <a href="https://github.com/junegunn/fzf#key-bindings-for-command-line">readline bindings</a> for looking up your shell history. <a href="https://en.wikipedia.org/wiki/GNU_Readline">Readline</a> is a GNU library providing line-editing capability for shells such as Bash.
+It provides a mechanism to bind keystrokes to custom functions with which you can manipulate your shell&rsquo;s command line.</p>
+<hr>
+<p>My idea was:</p>
+<ul>
+<li>Maintain a text file, <code>~/terms.txt</code>  with relevant commands, options, and paths</li>
+<li>Define a readline binding (e.g. <code>Ctrl-l</code>) which calls a custom function (e.g. <code>bind_terms()</code>)</li>
+<li>In the function use fzf to select the appropriate line from <code>~/terms.txt</code> I want to insert</li>
+<li>Modify the command line inserting the selected text</li>
+</ul>
+<hr>
+<p>As I previously outlined, I picked the key sequence <code>Ctrl-l</code> to call a bash function called <code>bind_terms()</code>.</p>
+<p>To achieve this, I added the following to my <code>~/.bashrc</code> configuration file:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">bind</span> -x <span class="s1">&#39;&#34;\C-l&#34;:bind_terms&#39;</span>
+</code></pre></div><p>It took me a minute reading the readline manual and googling some examples to get the quotations correct.</p>
+<hr>
+<p>Now all we need is to define a function which allows us to select the text and pass it back to readline:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bind_terms<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">fname</span><span class="o">=</span>~/terms.txt
+  <span class="nb">local</span> <span class="nv">selected</span><span class="o">=</span><span class="k">$(</span>cat <span class="si">${</span><span class="nv">fname</span><span class="si">}</span> <span class="p">|</span> fzf<span class="k">)</span>
+  <span class="nv">READLINE_LINE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}${</span><span class="nv">selected</span><span class="si">}${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}</span><span class="s2">&#34;</span>
+  <span class="nv">READLINE_POINT</span><span class="o">=</span><span class="k">$((</span> READLINE_POINT <span class="o">+</span> <span class="si">${#</span><span class="nv">selected</span><span class="si">}</span> <span class="k">))</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Lets break this down line by line&hellip;</p>
+<p>Line 2:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">local</span> <span class="nv">fname</span><span class="o">=</span>~/terms.txt
+</code></pre></div><p>We define the file which will contain the paths, command line invocations, etc. This can be in your <code>$HOME</code> or somewhere else under version control. BTW note we use the <code>local</code> keyword when defining the variable so it does not &ldquo;leak&rdquo; outside the function.</p>
+<hr>
+<p>Line 3:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">local</span> <span class="nv">selected</span><span class="o">=</span><span class="k">$(</span>cat <span class="si">${</span><span class="nv">fname</span><span class="si">}</span> <span class="p">|</span> fzf<span class="k">)</span>
+</code></pre></div><p>This is where we send the terms file into fuzzy finder so we can select what we want to paste into the command line.
+The selected line will be copied into the variable <code>${selected}</code>.</p>
+<hr>
+<p>Line 4:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">READLINE_LINE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}${</span><span class="nv">selected</span><span class="si">}${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}</span><span class="s2">&#34;</span>
+</code></pre></div><p>This is the most complicated line.</p>
+<p>Readline will have set 2 global variables when you invoke the binding (e.g. <code>Ctrl-l</code>):</p>
+<ul>
+<li><code>${READLINE_LINE}</code> contains what was already on the command (empty if starting on a blank line)</li>
+<li><code>${READLINE_POINT}</code> contains a number indicating where your cursor was (0 if starting on a blank line)</li>
+</ul>
+<p>We are going to re-define these two global variables (using their current information) to manipulate the command line at the time of the binding invocation and paste our selected term at the appropriate point.</p>
+<p>Lets imagine we typed the following on the command line:
+<code>head | sort --version-sort</code></p>
+<p>Now we reposition the cursor to be on top of the pipe (<code>|</code>). We want to insert a filename right before this pipe so we type <code>Ctrl-l</code> invoking our binding.</p>
+<p>Upon entering the function <code>bind_terms()</code>, <code>${READLINE_LINE}</code> will be set to <code>head | sort --version-sort</code> and <code>${READLINE_POINT}</code> will be set to <code>6</code>.</p>
+<p>Fzf will fire up and lets imagine we select the term <code>/data/project-alpha/samples/XYZ123.csv</code> popping it into the variable <code>${selected}</code>.</p>
+<p>We now edit the <code>${READLINE_LINE}</code> by revising it with 3 concatenated sections:</p>
+<ol>
+<li><code>${READLINE_LINE:0:$READLINE_POINT}</code> - Everything left of the cursor before invoking the binding</li>
+<li><code>${selected}</code> - The text to add</li>
+<li><code>${READLINE_LINE:${READLINE_POINT}</code> - Everything right of the cursor before invoking the binding</li>
+</ol>
+<hr>
+<p>Line 5:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">READLINE_POINT</span><span class="o">=</span><span class="k">$((</span> READLINE_POINT <span class="o">+</span> <span class="si">${#</span><span class="nv">selected</span><span class="si">}</span> <span class="k">))</span>
+</code></pre></div><p>Finally we want to put the cursor after the selected text we have added so update <code>${READLINE_POINT}</code> by adding the number of characters contained in <code>${selected}</code>.</p>
+<hr>
+<p>The function exits and readline reads back the global variables <code>${READLINE_LINE}</code> and <code>${READLINE_POINT}</code> and the line now reads:</p>
+<p>Before pressing Ctrl-l:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">head <span class="p">|</span> sort --version-sort
+     ^
+     <span class="o">(</span>cursor<span class="o">)</span>
+</code></pre></div><p>After pressing Ctrl-l and selecting term:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">head /data/project-alpha/samples/XYZ123.csv<span class="p">|</span> sort --version-sort
+                                           ^
+                                           <span class="o">(</span>cursor<span class="o">)</span>
+</code></pre></div>
+    </div>
+  </div>
+
+
+
+    <div class="footer">
+      &copy; Kevin M. Counts - Updated 2021-08-29
+    </div>
+  </body>
+</html>
