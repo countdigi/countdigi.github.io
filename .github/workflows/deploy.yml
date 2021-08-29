@@ -23,7 +23,7 @@ jobs:
       run: rm -rf public
 
     - name: Build
-      run: hugo build
+      run: hugo -e DEV
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
