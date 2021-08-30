@@ -9,20 +9,21 @@
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="/css/pygments/default.css" />
 
-    {{ if .Page.IsHome }}
-    <title>{{ .Site.Title }}</title>
-    <meta property="title"       content="{{ .Site.Title }}" />
+    {{ if eq .URL "/" }}
+    <title>{{ .Site.Params.Title }}</title>
+    <meta property="title"       content="{{ .Site.Params.Title }}" />
     <meta property="type"        content="website" />
     {{ else }}
-    <title>{{ .Site.Title }} :: {{ .Title }}</title>
-    <meta property="title"       content="{{ .Site.Title }} :: {{ .Title }}" />
+    <title>{{ .Site.Params.Title }} :: {{ .Title }}</title>
+    <meta property="title"       content="{{ .Site.Params.Title }} :: {{ .Title }}" />
     <meta property="type"        content="article" />
     {{ end }}
   </head>
 
   <body>
     <div class="header">
-      <h1>{{ .Site.Title }}</h1>
+      <h2>{{ .Site.Params.Title }}</h2>
+      <h3>{{ .Site.Params.Title_2 }}</h3>
     </div>
 
     <div class="topnav">
