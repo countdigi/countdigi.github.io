@@ -18,17 +18,17 @@ It provides a mechanism to bind keystrokes to custom functions with which you ca
 
 My idea was:
 - Maintain a text file, `~/terms.txt`  with relevant commands, options, and paths
-- Define a readline binding (e.g. `Ctrl-l`) which calls a custom function (e.g. `bind_terms()`)
+- Define a readline binding (e.g. `Ctrl-o`) which calls a custom function (e.g. `bind_terms()`)
 - In the function use fzf to select the appropriate line from `~/terms.txt` I want to insert
 - Modify the command line inserting the selected text
 
 ---
 
-As I previously outlined, I picked the key sequence `Ctrl-l` to call a bash function called `bind_terms()`.
+As I previously outlined, I picked the key sequence `Ctrl-o` to call a bash function called `bind_terms()`.
 
 To achieve this, I added the following to my `~/.bashrc` configuration file:
 ```bash {linenos=false}
-bind -x '"\C-l":bind_terms'
+bind -x '"\C-o":bind_terms'
 ```
 
 It took me a minute reading the readline manual and googling some examples to get the quotations correct.
@@ -76,7 +76,7 @@ READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT}${selected}${READLINE_LINE:$REA
 
 This is the most complicated line.
 
-Readline will have set 2 global variables when you invoke the binding (e.g. `Ctrl-l`):
+Readline will have set 2 global variables when you invoke the binding (e.g. `Ctrl-o`):
 - `${READLINE_LINE}` contains what was already on the command (empty if starting on a blank line)
 - `${READLINE_POINT}` contains a number indicating where your cursor was (0 if starting on a blank line)
 
@@ -85,7 +85,7 @@ We are going to re-define these two global variables (using their current inform
 Lets imagine we typed the following on the command line:
 `head | sort --version-sort`
 
-Now we reposition the cursor to be on top of the pipe (`|`). We want to insert a filename right before this pipe so we type `Ctrl-l` invoking our binding.
+Now we reposition the cursor to be on top of the pipe (`|`). We want to insert a filename right before this pipe so we type `Ctrl-o` invoking our binding.
 
 Upon entering the function `bind_terms()`, `${READLINE_LINE}` will be set to `head | sort --version-sort` and `${READLINE_POINT}` will be set to `6`.
 
@@ -109,14 +109,14 @@ Finally we want to put the cursor after the selected text we have added so updat
 
 The function exits and readline reads back the global variables `${READLINE_LINE}` and `${READLINE_POINT}` and the line now reads:
 
-Before pressing Ctrl-l:
+Before pressing Ctrl-o:
 ```bash {linenos=false}
 head | sort --version-sort
      ^
      (cursor)
 ```
 
-After pressing Ctrl-l and selecting term:
+After pressing Ctrl-o and selecting term:
 ```bash {linenos=false}
 head /data/project-alpha/samples/XYZ123.csv| sort --version-sort
                                            ^
