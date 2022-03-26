@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="stylesheet" href="/css/pygments/default.css" />
 
-    {{ if eq .URL "/" }}
+    {{ if eq .Permalink "/" }}
     <title>{{ .Site.Params.Title }}</title>
     <meta property="title"       content="{{ .Site.Params.Title }}" />
     <meta property="type"        content="website" />
