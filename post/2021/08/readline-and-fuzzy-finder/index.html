@@ -19,7 +19,7 @@
   <body>
     <div class="header">
       <h2>Kevin M. Counts</h2>
-      <h3>Linux, Bioinformatics, Distributed Systems Engineer</h3>
+      <h3>Senior DevOps Data Engineer</h3>
     </div>
 
     <div class="topnav">
@@ -49,8 +49,8 @@ It provides a mechanism to bind keystrokes to custom functions with which you ca
 <hr>
 <p>As I previously outlined, I picked the key sequence <code>Ctrl-o</code> to call a bash function called <code>bind_terms()</code>.</p>
 <p>To achieve this, I added the following to my <code>~/.bashrc</code> configuration file:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">bind</span> -x <span class="s1">&#39;&#34;\C-o&#34;:bind_terms&#39;</span>
-</code></pre></div><p>It took me a minute reading the readline manual and googling some examples to get the quotations correct.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">bind</span> -x <span class="s1">&#39;&#34;\C-o&#34;:bind_terms&#39;</span>
+</span></span></code></pre></div><p>It took me a minute reading the readline manual and googling some examples to get the quotations correct.</p>
 <hr>
 <p>Now all we need is to define a function which allows us to select the text and pass it back to readline:</p>
 <div class="highlight"><div class="chroma">
@@ -63,27 +63,27 @@ It provides a mechanism to bind keystrokes to custom functions with which you ca
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bind_terms<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">fname</span><span class="o">=</span>~/terms.txt
-  <span class="nb">local</span> <span class="nv">selected</span><span class="o">=</span><span class="k">$(</span>cat <span class="si">${</span><span class="nv">fname</span><span class="si">}</span> <span class="p">|</span> fzf<span class="k">)</span>
-  <span class="nv">READLINE_LINE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}${</span><span class="nv">selected</span><span class="si">}${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}</span><span class="s2">&#34;</span>
-  <span class="nv">READLINE_POINT</span><span class="o">=</span><span class="k">$((</span> READLINE_POINT <span class="o">+</span> <span class="si">${#</span><span class="nv">selected</span><span class="si">}</span> <span class="k">))</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bind_terms<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">local</span> <span class="nv">fname</span><span class="o">=</span>~/terms.txt
+</span></span><span class="line"><span class="cl">  <span class="nb">local</span> <span class="nv">selected</span><span class="o">=</span><span class="k">$(</span>cat <span class="si">${</span><span class="nv">fname</span><span class="si">}</span> <span class="p">|</span> fzf<span class="k">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">READLINE_LINE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}${</span><span class="nv">selected</span><span class="si">}${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">READLINE_POINT</span><span class="o">=</span><span class="k">$((</span> READLINE_POINT <span class="o">+</span> <span class="si">${#</span><span class="nv">selected</span><span class="si">}</span> <span class="k">))</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Lets break this down line by line&hellip;</p>
 <p>Line 2:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">local</span> <span class="nv">fname</span><span class="o">=</span>~/terms.txt
-</code></pre></div><p>We define the file which will contain the paths, command line invocations, etc. This can be in your <code>$HOME</code> or somewhere else under version control. BTW note we use the <code>local</code> keyword when defining the variable so it does not &ldquo;leak&rdquo; outside the function.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">local</span> <span class="nv">fname</span><span class="o">=</span>~/terms.txt
+</span></span></code></pre></div><p>We define the file which will contain the paths, command line invocations, etc. This can be in your <code>$HOME</code> or somewhere else under version control. BTW note we use the <code>local</code> keyword when defining the variable so it does not &ldquo;leak&rdquo; outside the function.</p>
 <hr>
 <p>Line 3:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">local</span> <span class="nv">selected</span><span class="o">=</span><span class="k">$(</span>cat <span class="si">${</span><span class="nv">fname</span><span class="si">}</span> <span class="p">|</span> fzf<span class="k">)</span>
-</code></pre></div><p>This is where we send the terms file into fuzzy finder so we can select what we want to paste into the command line.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">local</span> <span class="nv">selected</span><span class="o">=</span><span class="k">$(</span>cat <span class="si">${</span><span class="nv">fname</span><span class="si">}</span> <span class="p">|</span> fzf<span class="k">)</span>
+</span></span></code></pre></div><p>This is where we send the terms file into fuzzy finder so we can select what we want to paste into the command line.
 The selected line will be copied into the variable <code>${selected}</code>.</p>
 <hr>
 <p>Line 4:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">READLINE_LINE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}${</span><span class="nv">selected</span><span class="si">}${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}</span><span class="s2">&#34;</span>
-</code></pre></div><p>This is the most complicated line.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">READLINE_LINE</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">0</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}${</span><span class="nv">selected</span><span class="si">}${</span><span class="nv">READLINE_LINE</span><span class="p">:</span><span class="nv">$READLINE_POINT</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><p>This is the most complicated line.</p>
 <p>Readline will have set 2 global variables when you invoke the binding (e.g. <code>Ctrl-o</code>):</p>
 <ul>
 <li><code>${READLINE_LINE}</code> contains what was already on the command (empty if starting on a blank line)</li>
@@ -103,26 +103,26 @@ The selected line will be copied into the variable <code>${selected}</code>.</p>
 </ol>
 <hr>
 <p>Line 5:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">READLINE_POINT</span><span class="o">=</span><span class="k">$((</span> READLINE_POINT <span class="o">+</span> <span class="si">${#</span><span class="nv">selected</span><span class="si">}</span> <span class="k">))</span>
-</code></pre></div><p>Finally we want to put the cursor after the selected text we have added so update <code>${READLINE_POINT}</code> by adding the number of characters contained in <code>${selected}</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">READLINE_POINT</span><span class="o">=</span><span class="k">$((</span> READLINE_POINT <span class="o">+</span> <span class="si">${#</span><span class="nv">selected</span><span class="si">}</span> <span class="k">))</span>
+</span></span></code></pre></div><p>Finally we want to put the cursor after the selected text we have added so update <code>${READLINE_POINT}</code> by adding the number of characters contained in <code>${selected}</code>.</p>
 <hr>
 <p>The function exits and readline reads back the global variables <code>${READLINE_LINE}</code> and <code>${READLINE_POINT}</code> and the line now reads:</p>
 <p>Before pressing Ctrl-o:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">head <span class="p">|</span> sort --version-sort
-     ^
-     <span class="o">(</span>cursor<span class="o">)</span>
-</code></pre></div><p>After pressing Ctrl-o and selecting term:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">head /data/project-alpha/samples/XYZ123.csv<span class="p">|</span> sort --version-sort
-                                           ^
-                                           <span class="o">(</span>cursor<span class="o">)</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">head <span class="p">|</span> sort --version-sort
+</span></span><span class="line"><span class="cl">     ^
+</span></span><span class="line"><span class="cl">     <span class="o">(</span>cursor<span class="o">)</span>
+</span></span></code></pre></div><p>After pressing Ctrl-o and selecting term:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">head /data/project-alpha/samples/XYZ123.csv<span class="p">|</span> sort --version-sort
+</span></span><span class="line"><span class="cl">                                           ^
+</span></span><span class="line"><span class="cl">                                           <span class="o">(</span>cursor<span class="o">)</span>
+</span></span></code></pre></div>
     </div>
   </div>
 
 
 
     <div class="footer">
-      &copy; Kevin M. Counts - Updated 2021-09-03
+      &copy; Kevin M. Counts - Updated 2022-03-26
     </div>
   </body>
 </html>

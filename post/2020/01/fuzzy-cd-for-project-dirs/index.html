@@ -19,7 +19,7 @@
   <body>
     <div class="header">
       <h2>Kevin M. Counts</h2>
-      <h3>Linux, Bioinformatics, Distributed Systems Engineer</h3>
+      <h3>Senior DevOps Data Engineer</h3>
     </div>
 
     <div class="topnav">
@@ -113,44 +113,44 @@ $ # do your work now...
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cdp<span class="o">()</span> <span class="o">{</span>
-    <span class="nb">local</span> <span class="nv">levels</span><span class="o">=</span><span class="m">2</span>
-    <span class="nb">local</span> <span class="nv">project_dir</span><span class="o">=</span>~/dev
-
-    <span class="nb">local</span> <span class="nv">target_dir</span><span class="o">=</span><span class="k">$(</span>
-      <span class="nb">cd</span> <span class="si">${</span><span class="nv">project_dir</span><span class="si">}</span>
-      find . -maxdepth <span class="si">${</span><span class="nv">levels</span><span class="si">}</span> -mindepth <span class="si">${</span><span class="nv">levels</span><span class="si">}</span> -type d <span class="p">|</span> fzf --query <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>
-    <span class="k">)</span>
-
-    <span class="nb">cd</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">project_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">target_dir</span><span class="si">}</span><span class="s2">&#34;</span>
-
-    <span class="k">if</span> <span class="o">[[</span> -d .git <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="nb">printf</span> <span class="s1">&#39;&gt; git fetch --quiet (%s)\n&#39;</span> <span class="s2">&#34;</span><span class="k">$(</span>git config --get remote.origin.url<span class="k">)</span><span class="s2">&#34;</span><span class="p">;</span>
-        git fetch --quiet<span class="p">;</span>
-        git branch --verbose<span class="p">;</span>
-        git status --short<span class="p">;</span>
-    <span class="k">fi</span>
-
-    <span class="k">if</span> <span class="o">[[</span> -n <span class="si">${</span><span class="nv">TMUX</span><span class="si">}</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-      <span class="nb">local</span> <span class="nv">rename_parent</span><span class="o">=(</span>usf-hii/hii countdigi/digi<span class="o">)</span>
-      <span class="nb">local</span> <span class="nv">rename_proj</span><span class="o">=(</span>fac-parikhh/fp<span class="o">)</span>
-      <span class="nb">local</span> rename
-
-      <span class="nb">local</span> <span class="nv">parent_dir</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span><span class="k">)</span>
-      <span class="nb">local</span> <span class="nv">proj_dir</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&#34;</span><span class="k">)</span>
-
-      <span class="k">for</span> rename in <span class="si">${</span><span class="nv">rename_parent</span><span class="p">[@]</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
-        <span class="nv">parent_dir</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">parent_dir</span><span class="si">}</span> <span class="p">|</span> sed <span class="s2">&#34;s/</span><span class="si">${</span><span class="nv">rename</span><span class="si">}</span><span class="s2">/&#34;</span><span class="k">)</span>
-      <span class="k">done</span>
-
-      <span class="k">for</span> rename in <span class="si">${</span><span class="nv">rename_proj</span><span class="p">[@]</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
-        <span class="nv">proj_dir</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">proj_dir</span><span class="si">}</span> <span class="p">|</span> sed <span class="s2">&#34;s/</span><span class="si">${</span><span class="nv">rename</span><span class="si">}</span><span class="s2">/&#34;</span><span class="k">)</span>
-      <span class="k">done</span>
-
-      tmux rename-window <span class="s2">&#34;</span><span class="si">${</span><span class="nv">parent_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">proj_dir</span><span class="si">}</span><span class="s2">&#34;</span>
-    <span class="k">fi</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cdp<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">local</span> <span class="nv">levels</span><span class="o">=</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">local</span> <span class="nv">project_dir</span><span class="o">=</span>~/dev
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">local</span> <span class="nv">target_dir</span><span class="o">=</span><span class="k">$(</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">cd</span> <span class="si">${</span><span class="nv">project_dir</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">      find . -maxdepth <span class="si">${</span><span class="nv">levels</span><span class="si">}</span> -mindepth <span class="si">${</span><span class="nv">levels</span><span class="si">}</span> -type d <span class="p">|</span> fzf --query <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">cd</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">project_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">target_dir</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[[</span> -d .git <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">printf</span> <span class="s1">&#39;&gt; git fetch --quiet (%s)\n&#39;</span> <span class="s2">&#34;</span><span class="k">$(</span>git config --get remote.origin.url<span class="k">)</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        git fetch --quiet<span class="p">;</span>
+</span></span><span class="line"><span class="cl">        git branch --verbose<span class="p">;</span>
+</span></span><span class="line"><span class="cl">        git status --short<span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[[</span> -n <span class="si">${</span><span class="nv">TMUX</span><span class="si">}</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">local</span> <span class="nv">rename_parent</span><span class="o">=(</span>usf-hii/hii countdigi/digi<span class="o">)</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">local</span> <span class="nv">rename_proj</span><span class="o">=(</span>fac-parikhh/fp<span class="o">)</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">local</span> rename
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nb">local</span> <span class="nv">parent_dir</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">      <span class="nb">local</span> <span class="nv">proj_dir</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> rename in <span class="si">${</span><span class="nv">rename_parent</span><span class="p">[@]</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">parent_dir</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">parent_dir</span><span class="si">}</span> <span class="p">|</span> sed <span class="s2">&#34;s/</span><span class="si">${</span><span class="nv">rename</span><span class="si">}</span><span class="s2">/&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> rename in <span class="si">${</span><span class="nv">rename_proj</span><span class="p">[@]</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">proj_dir</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">proj_dir</span><span class="si">}</span> <span class="p">|</span> sed <span class="s2">&#34;s/</span><span class="si">${</span><span class="nv">rename</span><span class="si">}</span><span class="s2">/&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      tmux rename-window <span class="s2">&#34;</span><span class="si">${</span><span class="nv">parent_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">proj_dir</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -159,7 +159,7 @@ $ # do your work now...
 
 
     <div class="footer">
-      &copy; Kevin M. Counts - Updated 2021-09-03
+      &copy; Kevin M. Counts - Updated 2022-03-26
     </div>
   </body>
 </html>
